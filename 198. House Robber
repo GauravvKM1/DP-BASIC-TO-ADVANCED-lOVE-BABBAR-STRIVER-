@@ -1,0 +1,59 @@
+class Solution {
+public:
+// n is index here
+  int Recursion(vector<int>& nums,int n){
+    // base case
+    if(n<0)return 0;
+    if(n==0)return nums[0];
+
+    // include
+    int include=Recursion(nums,n-2)+nums[n];
+    int exclude=Recursion(nums,n-1);
+
+    return max(include,exclude);
+  }
+
+  int Memoize(vector<int>& nums,int n,vector<int>&dp){
+    if(n<0)return 0;
+    if(n==0)return nums[0];
+
+    // n is index here
+    if(dp[n]!=-1){
+        return dp[n];
+    }
+     
+     int include=Memoize(nums,n-2,dp)+nums[n];
+     int exclude=Memoize(nums,n-1,dp);
+
+    dp[n]=max(include,exclude);
+     return dp[n];
+  }
+
+  int Tabulate(vector<int>& nums,int n){
+    vector<int>dp(n+1,-1);
+
+//    filling karte hai
+    dp[0]=nums[0];
+     
+     int temp=0;
+    for(int i=1;i<=n;i++){
+        if(i-2>=0){
+            temp=dp[i-2];
+        }
+      int include=temp+nums[i];
+      int exclude=dp[i-1];
+      dp[i]=max(include,exclude);
+    }
+
+    return dp[n];
+  }
+    int rob(vector<int>& nums) {
+        int n=nums.size()-1;
+        // int ans=Recursion(nums,n);
+        // craete a dp array
+        vector<int>dp(n+1,-1);
+        // int ans=Memoize(nums,n,dp);
+        int ans=Tabulate(nums,n);
+        return ans;
+    }
+};
