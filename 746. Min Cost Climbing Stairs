@@ -1,0 +1,67 @@
+class Solution {
+public:
+//   int solve(vector<int>& cost,int idx){
+    // base case
+//     if(idx>=cost.size()){
+//         return 0;
+//     }
+
+//    int Onestep=cost[idx]+solve(cost,idx+1);
+//    int TWoStep=cost[idx]+solve(cost,idx+2);
+
+//    return min(Onestep,TWoStep);
+//   }
+        
+  int solve(vector<int>& cost,int idx,vector<int>&dp){
+     if(idx>=cost.size()){
+        return 0;
+    }
+
+    // check if answer already exists
+    if(dp[idx]!=-1){
+        return dp[idx];
+    }
+     int Onestep=cost[idx]+solve(cost,idx+1,dp);
+     int TWoStep=cost[idx]+solve(cost,idx+2,dp);
+
+   return dp[idx]=min(Onestep,TWoStep);
+  }
+
+  int solve(vector<int>& cost){
+    int n=cost.size();
+    vector<int>dp(n+1,-1);
+    dp[0]=cost[0];
+    dp[1]=cost[1];
+    if(n==2)return min(dp[0],dp[1]);
+
+    for(int i=2;i<n;i++){
+         dp[i]=cost[i]+min(dp[i-1],dp[i-2]);
+    }
+    return min(dp[n-1],dp[n-2]);
+  }
+
+  int solve1(vector<int>& cost,int n){
+    int prev1=cost[1];
+    int prev2=cost[0];
+     int curr=0;
+    for(int i=2;i<n;i++){
+        curr=cost[i]+min(prev1,prev2);
+        prev2=prev1;
+        prev1=curr;
+    }
+    return min(prev1,prev2);
+  }
+    int minCostClimbingStairs(vector<int>& cost) {
+        // int Recursion=min(solve(cost,0),solve(cost,1));
+        // return Recursion;
+        //  craete a dp array
+        int n=cost.size();
+        vector<int>dp(n+1,-1);
+        // int MemSolve=min(solve(cost,0,dp),solve(cost,1,dp));
+        // int Tabulate=solve(cost);
+        // return Tabulate;
+
+        int space=solve1(cost,n);
+        return space;
+    }
+};
