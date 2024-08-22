@@ -1,0 +1,82 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+#include<stdio.h>
+#include<math.h>
+using namespace std;
+
+// } Driver Code Ends
+class Solution{
+    public:
+    const int MOD = 1000000007;
+    long long SolveRecursive(int n,int k){
+        
+        if(n==1)return k;
+        
+        if(n==2) return k*(k-1)+k;
+        
+        long long samecolor=SolveRecursive(n-1,k)*(k-1);
+        long long diffColor=SolveRecursive(n-2,k)*(k-1);
+        
+        return (samecolor+diffColor);
+        
+    }
+    
+    long long solveMem(int n,long  k,vector<long long>&dp){
+        if(n==1)return k%(MOD);
+        
+        if(n==2)return (k*k)%(MOD);
+        
+        // check kar rhe hai if answer already exists
+        
+        if(dp[n]!=-1){
+            return dp[n]%MOD;
+        }
+        
+        long long samecolor=solveMem(n-1,k,dp)*(k-1)%(MOD);
+        long long diffColor=solveMem(n-2,k,dp)*(k-1)%(MOD);
+        
+        return dp[n]=(samecolor+diffColor)%MOD;
+    }
+    
+    long long Tabulate(int n,long long k){
+        
+         
+        vector<long long>dp(n+1,-1);
+        
+        dp[1]=k%(MOD);
+        dp[2]=k*k%(MOD);
+        
+        for(int i=3;i<=n;i++){
+            long long samecolor=dp[i-1]*(k-1)%(MOD);
+            long long diffColor=dp[i-2]*(k-1)%(MOD);
+            dp[i]=(samecolor+diffColor)%MOD;
+        }
+        return dp[n];
+    }
+    long long countWays(int n, int k){
+        // code here
+        // long long ans=SolveRecursive(n,k);
+        // vector<long long>dp(n+1,-1);
+        // long long ans=solveMem(n,k,dp);
+        long long ans=Tabulate( n, k);
+        return ans;
+    }
+};
+
+//{ Driver Code Starts.
+
+int main()
+{
+	
+	int t;
+	cin>>t;
+	while(t--)
+	{
+		int n,k;
+		cin>>n>>k;
+		Solution ob;
+		cout<<ob.countWays(n,k)<<endl;
+	}
+	return 0;
+}
+// } Driver Code Ends
