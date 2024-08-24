@@ -1,0 +1,44 @@
+
+class Solution {
+public:
+ 
+     
+    int solve(vector<int> &nums, set<int>& ans, int index, int sum, vector<vector<int>>& dp) {
+        if(index < 0) {
+        ans.insert(sum);
+        return 1;
+         }
+
+         if(dp[index][sum] != -1) {
+         return dp[index][sum];
+         }
+
+        // Include the current element
+           int include = solve(nums, ans, index - 1, sum + nums[index], dp);
+           int exclude = solve(nums, ans, index - 1, sum, dp);
+           return dp[index][sum] = (include + exclude);
+
+    }
+
+   vector<int> DistinctSum(vector<int>nums){
+	    // Code here
+	    set<int>ans;
+	    int n=nums.size(),sum=0;
+	   // solve(nums,ans,n-1,sum);
+	   // isse bhi kar  skte hai
+	   // sort(ans.begin(),ans.end());
+    //     ans.erase(unique(ans.begin(), ans.end()), ans.end());
+        
+        // vector<int>finalans(ans.begin(),ans.end());
+        int total = 0;
+	    for( int i=0; i<n; i++ ){
+	        total =total+ nums[i];}
+        vector<vector<int>>dp(n+1,vector<int>(total+1,-1));
+        solve(nums,ans,n-1,sum,dp);
+        vector<int>finalans(ans.begin(),ans.end());
+	    return finalans;
+	}
+
+};
+
+
