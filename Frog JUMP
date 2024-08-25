@@ -1,0 +1,35 @@
+
+class Solution {
+  public:
+  
+    int MemoCode(int index,vector<int>&height,vector<int>&dp){
+        if(index==0)return 0;
+        
+        if(dp[index]!=-1)return dp[index];
+        int onestep=abs(height[index-1]-height[index])+MemoCode(index-1,height,dp);
+        int twostep=INT_MAX;
+        if(index>1)
+          twostep=abs(height[index-2]-height[index])+MemoCode(index-2,height,dp);
+        return dp[index]=min(onestep,twostep);
+        
+    }
+    int minimumEnergy(vector<int>& height, int n) {
+        // Code here
+        // int ans=solve(n-1,height);
+        vector<int>dp(n+1,-1);
+        // int ans=MemoCode(n-1,height,dp);
+        // int ans=tabulate()
+        
+        dp[0]=0;
+        
+        for(int i=1;i<n;i++){
+        int onestep=abs(height[i-1]-height[i])+dp[i-1];
+        int twostep=INT_MAX;
+        if(i>1)
+          twostep=abs(height[i-2]-height[i])+dp[i-2];
+         dp[i]=min(onestep,twostep);    
+        }
+        return dp[n-1];
+    }
+};
+
