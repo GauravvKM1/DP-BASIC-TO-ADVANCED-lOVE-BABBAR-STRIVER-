@@ -1,1 +1,57 @@
 
+class Solution {
+  public:
+    // Function to return max value that can be put in knapsack of capacity W.
+    int solveUsingRecursion(int W, vector<int>& wt, vector<int>& val,int index){
+        // base case
+        // gar single elemnet hai
+        if(index==0){
+            if(wt[0]<=W){
+                return val[0];
+            }
+            else return 0;
+        }
+        
+        int include=0;
+        if(wt[index]<=W)
+         include=val[index]+solveUsingRecursion(W-wt[index],wt,val,index-1);
+         
+         int exclude=0+ solveUsingRecursion(W,wt,val,index-1);
+         
+         return max(include,exclude);
+    }
+    
+    int solveUsingMemo(int W, vector<int>& wt, vector<int>& val,int index,vector<vector<int>>&dp){
+        
+        if(index==0){
+            // single item
+            if(wt[0]<=W){
+                return val[0];
+            }
+            else return 0;
+        }
+        
+        if(dp[index][W]!=-1) {
+            
+            return dp[index][W];
+        }
+        
+        int include=0;
+        
+        if(wt[index]<=W)
+           include=val[index]+solveUsingMemo(W-wt[index],wt,val,index-1,dp);
+           
+           int exclude=solveUsingMemo(W,wt,val,index-1,dp);
+           
+           return dp[index][W]=max(include,exclude);
+    }
+    int knapSack(int W, vector<int>& wt, vector<int>& val) {
+        // Your code here
+        int n=wt.size();
+        // int ans=solveUsingRecursion(W,wt,val,n-1);
+        vector<vector<int>>dp(n,vector<int>(W+1,-1));
+        int ans=solveUsingMemo(W,wt,val,n-1,dp);
+        return ans;
+    }
+};
+
