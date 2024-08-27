@@ -1,0 +1,48 @@
+
+class Solution{
+public:
+// N is index here
+    int solve(int arr[],int target,int N){
+        // base case
+        if(target==0)return 1;
+        if(target<0)return 0;
+        if(N<0)return 0;
+        
+        int include=0;
+            include=solve(arr,target-arr[N],N-1);
+        int Exclude=solve(arr,target,N-1);
+        
+        return include||Exclude;
+        
+    }
+    
+    int solve1(int arr[],int target,int N,vector<vector<int>>&dp){
+        if(target==0)return 1;
+        if(target<0)return 0;
+        if(N<0)return 0;
+        
+        if(dp[N][target]!=-1)return dp[N][target];
+        
+        int include=0;
+            include=solve1(arr,target-arr[N],N-1,dp);
+        int Exclude=solve1(arr,target,N-1,dp);
+        
+        return dp[N][target]=include||Exclude;
+        
+    }
+    int equalPartition(int N, int arr[])
+    {
+        // code here
+        int sum=0;
+        for(int i=0;i<N;i++){
+            sum+=arr[i];
+        }
+        
+        if(sum%2!=0)return 0;
+        int target=sum/2;
+        vector<vector<int>>dp(N,vector<int>(target+1,-1));
+        int ans=solve1(arr,target,N-1,dp);
+        return ans;
+    }
+};
+
