@@ -1,1 +1,30 @@
 
+
+
+class Solution{
+  public:
+   int solve(int a[], int n, int k, int target, vector<bool>& visited, int index,int Csum){
+      if(k == 1) return 1;  // If there's only one subset left, the rest must sum to the target
+      if(target == Csum) return solve(a, n, k-1, target, visited, 0,0); // Found a valid subset, move to the next
+      if(index>=n)return 0;
+      for(int i = index; i < n; i++){
+          if(!visited[i] && target - a[i] >= 0){
+              visited[i] = true;
+              if(solve(a, n, k, target, visited, i + 1,Csum+a[i])) return true;
+              visited[i] = false;  // Backtrack
+          }
+      }
+      return false;
+  }
+  
+   bool isKPartitionPossible(int a[], int n, int k){
+      int sum = 0;
+      for(int i = 0; i < n; i++) sum += a[i];
+      
+      if(sum % k != 0 || k > n) return false;
+      int target = sum / k;
+      vector<bool> visited(n, false);
+      return solve(a, n, k, target, visited, 0,0);
+   }
+};
+
