@@ -1,0 +1,32 @@
+
+---------------------------------------->>>>>>> Tle Code   
+
+class Solution {
+public:
+    bool isUgly(int n) {
+        if (n <= 0) return false; // Non-positive numbers are not ugly
+        while (n % 2 == 0) n /= 2;
+        while (n % 3 == 0) n /= 3;
+        while (n % 5 == 0) n /= 5;
+        return n == 1; // If we end up with 1, it means the number is ugly
+    }
+
+   
+    int nthUglyNumber(int n) {
+        int count = 0;  // To count how many ugly numbers we've found
+        int i = 1;      // Start checking from 1
+        while (true) {
+            if (isUgly(i)) {
+                count++;
+                if (count == n) {
+                    return i;  // Returning the nth ugly number
+                }
+            }
+            i++;
+        }
+    }
+};
+
+
+
+
